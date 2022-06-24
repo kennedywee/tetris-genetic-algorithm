@@ -4,8 +4,8 @@ import genetic_alg as ga
 f = open("record.txt", "w")
 
 num_weights = 4
-sol_per_pop = 5
-num_generations = 5
+sol_per_pop = 4
+num_generations = 4
 num_parents_mating = 2
 pieceLimit = 100
 # seeds: if seed<0: random else random.seed = seed

@@ -15,6 +15,7 @@ def select_mating_pool(pop, fitness, num_parents):
         max_fitness_idx = max_fitness_idx[0][0]
         parents[parent_num, :] = pop[max_fitness_idx, :]
         fitness[max_fitness_idx] = -99999999999
+    print(f"parents: {parents}")
     return parents
 
 # single point crossover
@@ -26,6 +27,7 @@ def crossover(parents, offspring_size):
         parent2_idx = (k + 1) % parents.shape[0]
         offspring[k, 0:crossover_point] = parents[parent1_idx, 0:crossover_point]
         offspring[k, crossover_point:] = parents[parent2_idx, crossover_point:]
+    print(f"offspring: {offspring}")
     return offspring
 
 # uniform mutation
@@ -36,6 +38,7 @@ def mutation(offspring_crossover):
         random_value = numpy.random.uniform(-1.0, 1.0, 1)
         #print(offspring_crossover[idx, mutation_point])
         offspring_crossover[idx, mutation_point] = offspring_crossover[idx, mutation_point] + random_value
-        #print(offspring_crossover[idx, mutation_point])
-
+        print(offspring_crossover[idx, mutation_point])
+        
+    print(f"offspring_crossover: {offspring_crossover}")
     return offspring_crossover
