@@ -24,3 +24,4 @@ def chooseFbag(shape_list_index, shape_first):
         shape_index = random.choice(shape_list_index)
         shape_list_index.remove(shape_index)
         return shape_index
+        
