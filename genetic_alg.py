@@ -1,5 +1,7 @@
+from turtle import position
 import numpy
 import tetris
+import copy
 
 def cal_pop_fitness(pop, pieceLimit, seed):
     fitness = []
@@ -15,7 +17,7 @@ def select_mating_pool(pop, fitness, num_parents):
         max_fitness_idx = max_fitness_idx[0][0]
         parents[parent_num, :] = pop[max_fitness_idx, :]
         fitness[max_fitness_idx] = -99999999999
-    print(f"parents: {parents}")
+    #print(f"parents: {parents}")
     return parents
 
 # single point crossover
@@ -30,15 +32,20 @@ def crossover(parents, offspring_size):
     print(f"offspring: {offspring}")
     return offspring
 
-# uniform mutation
-def mutation(offspring_crossover):
-    mutation_point = 2
-    #print(offspring_crossover)
+# swap mutation
+def mutation(offspring_crossover, mutation_probability):
+
+    index_range = round(offspring_crossover.shape[1] * mutation_probability)
+
+    print(f"offspring_crossover: {offspring_crossover.shape[1]}")
+    print("index_range: ", index_range)
+    
     for idx in range(offspring_crossover.shape[0]):
-        random_value = numpy.random.uniform(-1.0, 1.0, 1)
-        #print(offspring_crossover[idx, mutation_point])
-        offspring_crossover[idx, mutation_point] = offspring_crossover[idx, mutation_point] + random_value
-        print(offspring_crossover[idx, mutation_point])
-        
+        mutation_gene1 = numpy.random.randint(low=0, high=offspring_crossover.shape[1]/2, size=1)[0]
+        mutation_gene2 = mutation_gene1 + int(offspring_crossover.shape[1]/2)
+        temp = offspring_crossover[idx, mutation_gene1]
+        offspring_crossover[idx, mutation_gene1] = offspring_crossover[idx, mutation_gene2]
+        offspring_crossover[idx, mutation_gene2] = temp
     print(f"offspring_crossover: {offspring_crossover}")
     return offspring_crossover
+

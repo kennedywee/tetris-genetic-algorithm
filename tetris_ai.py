@@ -25,8 +25,8 @@ class Ai:
                         heuristics = field.heuristics()
                         score = sum([a * b for a, b in zip(heuristics, weights)])
                     else:
-                        _, _, score = Ai.best(field, workingPieces, workingPieceIndex + 1, weights, 2)
-                    if bestScore is None or score > bestScore:
+                        _, _, score = Ai.best(field, workingPieces, workingPieceIndex + 1, weights, 2) 
+                    if bestScore is None or score > bestScore:    
                         bestScore = score
                         bestOffset = offset
                         bestRotation = rotation

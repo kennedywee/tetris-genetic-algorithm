@@ -1,5 +1,6 @@
 import copy
 from pickle import TRUE
+from re import T
 import time
 import threading
 import random
@@ -10,7 +11,8 @@ from gui import Gui
 import random_piece_generator as rpg
 
 # Random Piece Generator
-shape_list_index = [0, 1, 2, 3, 4, 5, 6]
+shape_list_index = [0, 1, 2, 3, 4] # only selects T J L I at first
+shape_first = True
 
 # The configuration
 cell_size = 30
@@ -38,12 +40,6 @@ tetris_shapes = [
     [[1, 1, 1],
      [0, 1, 0]],
 
-    [[0, 2, 2],
-     [2, 2, 0]],
-
-    [[3, 3, 0],
-     [0, 3, 3]],
-
     [[4, 0, 0],
      [4, 4, 4]],
 
@@ -53,7 +49,13 @@ tetris_shapes = [
     [[6, 6, 6, 6]],
 
     [[7, 7],
-     [7, 7]]
+     [7, 7]],
+
+    [[0, 2, 2],
+     [2, 2, 0]],
+
+    [[3, 3, 0],
+     [0, 3, 3]]
 ]
 
 
@@ -103,20 +105,20 @@ class TetrisApp(object):
         self.nbPiece = 0
         if seed >= 0:
             random.seed(seed)
-        self.choice = rpg.chooseFbag(shape_list_index)
+        self.choice = rpg.chooseFbag(shape_list_index, shape_first)
         self.next_stone = tetris_shapes[self.choice]
         self.playWithUI = playWithUI
         self.fast_mode = True
         if playWithUI:
             self.gui = Gui()
-            self.fast_mode = True
+            self.fast_mode = False
         self.init_game()
 
     
 
     def new_stone(self):
         self.stone = self.next_stone[:]
-        self.choice = rpg.chooseFbag(shape_list_index)
+        self.choice = rpg.chooseFbag(shape_list_index, shape_first)
         self.next_stone = tetris_shapes[self.choice]
         self.stone_x = int(cols / 2 - len(self.stone[0]) / 2)
         self.stone_y = 0
@@ -134,6 +136,7 @@ class TetrisApp(object):
         self.level = 1
         self.score = 0
         self.lines = 0
+        pygame.time.set_timer(pygame.USEREVENT+1, 200)
 
     def add_cl_lines(self, n):
         linescores = [0, 40, 100, 300, 1200]
@@ -141,6 +144,9 @@ class TetrisApp(object):
         self.score += linescores[n % 5] * self.level
         if self.lines >= self.level * 6:
             self.level += 1
+            new_delay = 200 - 50 * (self.level - 1)
+            new_delay = 10 if new_delay < 10 else new_delay
+            pygame.time.set_timer(pygame.USEREVENT+1, new_delay)
 
     def move(self, delta_x):
         if not self.gameover and not self.paused:
@@ -208,7 +214,7 @@ class TetrisApp(object):
     def speed_up(self):
         self.fast_mode = not self.fast_mode
         if self.fast_mode:
-            pygame.time.set_timer(pygame.USEREVENT + 1, 2000)
+            pygame.time.set_timer(pygame.USEREVENT + 1, 200)
             self.insta_drop()
         else:
             pygame.time.set_timer(pygame.USEREVENT + 1, 25)
@@ -269,7 +275,7 @@ class TetrisApp(object):
 
 if __name__ == '__main__':
     seed = -1
-    piece_limit = 100
+    piece_limit = 500
     weights = [-0.74527646, 0.69234365, -0.58460981, -0.28681621]
     result = TetrisApp(TRUE, seed).run(weights, piece_limit)
     print(result)

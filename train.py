@@ -4,15 +4,18 @@ import genetic_alg as ga
 f = open("record.txt", "w")
 
 num_weights = 4
-sol_per_pop = 4
+sol_per_pop = 10
 num_generations = 4
 num_parents_mating = 2
-pieceLimit = 100
+pieceLimit = 500
 # seeds: if seed<0: random else random.seed = seed
 seed = 1
 
+# mutation
+mutation_probability = 0.5 # meaning we do only half of the mutations
+
 pop_size = (sol_per_pop, num_weights)
-new_population = numpy.random.uniform(low=-1.0, high=1.0, size=pop_size)
+new_population = numpy.random.uniform(low=-3.0, high=3.0, size=pop_size)
 # constraints
 
 print(new_population)
@@ -26,7 +29,7 @@ for generation in range(num_generations):
     f.write(f"Generation {generation + 1} fitnesses: ")
     parents = ga.select_mating_pool(new_population, fitness, num_parents_mating)
     offspring_crossover = ga.crossover(parents, offspring_size=(pop_size[0] - parents.shape[0], num_weights))
-    offspring_mutation = ga.mutation(offspring_crossover)
+    offspring_mutation = ga.mutation(offspring_crossover, mutation_probability)
     new_population[0:parents.shape[0],     :] = parents
     new_population[parents.shape[0]:, :] = offspring_mutation
     fitness = ga.cal_pop_fitness(new_population, pieceLimit, seed)
