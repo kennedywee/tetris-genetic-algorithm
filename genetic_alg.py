@@ -3,25 +3,28 @@ import numpy
 import tetris
 import copy
 
+# calculate the population fitness
 def cal_pop_fitness(pop, pieceLimit, seed):
     fitness = []
     for indv in range(len(pop)):
         fitness.append(tetris.TetrisApp(True, seed).run(pop[indv], pieceLimit))
     return fitness
 
-# uniform selection
-def select_mating_pool(pop, fitness, num_parents):
-    parents = numpy.empty((num_parents, pop.shape[1]))
+# tournament selection
+def selection(population, fitness, num_parents):
+    # Selecting the best individuals in the current generation as parents for producing the offspring of the next generation.
+    parents = numpy.empty((num_parents, population.shape[1]))
     for parent_num in range(num_parents):
         max_fitness_idx = numpy.where(fitness == numpy.max(fitness))
         max_fitness_idx = max_fitness_idx[0][0]
-        parents[parent_num, :] = pop[max_fitness_idx, :]
-        fitness[max_fitness_idx] = -99999999999
+        parents[parent_num, :] = population[max_fitness_idx, :]
+        fitness[max_fitness_idx] = -99999999999 # To avoid selecting the same parent again, set the current fitness to lowest.
     #print(f"parents: {parents}")
     return parents
 
 # single point crossover
 def crossover(parents, offspring_size):
+    # The point at which crossover takes place between two parents. Usually, it is at the center.
     offspring = numpy.empty(offspring_size)
     crossover_point = numpy.uint8(offspring_size[1] / 2)
     for k in range(offspring_size[0]):

@@ -111,7 +111,7 @@ class TetrisApp(object):
         self.fast_mode = True
         if playWithUI:
             self.gui = Gui()
-            self.fast_mode = False
+            self.fast_mode = True
         self.init_game()
 
     
