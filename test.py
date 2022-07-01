@@ -1,19 +1,13 @@
-import random
-import copy
+import numpy
+K_fitness = []
+fitness = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 
-def mutation(solution):
-    n = len(solution)
-    position_1 = random.randint(0, n-1)
-    position_2 = random.randint(0, n-1)
+rand_index = numpy.random.randint(0, len(fitness), size = 3)
 
-    result = swap(solution, position_1, position_2)
-    return result
+print(f"rand_index: {rand_index}")
 
-def swap(solution, position_1, position_2):
-    result = solution.copy()
-    elA = solution[position_1]
-    elB = solution[position_2]
-    result[position_1] = elB
-    result[position_2] = elA
-    return result
 
+
+
+K_fitness = [fitness[idx] for idx in rand_index]
+print(f"K_fitness: {K_fitness}")

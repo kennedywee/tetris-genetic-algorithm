@@ -16,6 +16,7 @@ def chooseFbag(shape_list_index, shape_first):
 
     if shape_first == True:
         shape_first = False
+        shape_list_index = [0, 1, 2, 3, 4]
         shape_index = random.choice(shape_list_index)
         shape_list_index.remove(shape_index)
         return shape_index
