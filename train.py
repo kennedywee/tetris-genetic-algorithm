@@ -5,20 +5,16 @@ import matplotlib.pyplot as plt
 f = open("record.txt", "w")
 
 num_weights = 4
-sol_per_pop = 4
-num_generations = 4
-num_parents_mating = 2
-pieceLimit = 100
+sol_per_pop = 20
+num_generations = 10
+num_parents_mating = 4
+pieceLimit = 300
 # seeds: if seed<0: random else random.seed = seed
-seed = 0.1
+seed = 1
 
-
-
-# mutation
-mutation_probability = 0.5 # meaning we do only half of the mutations
 
 pop_size = (sol_per_pop, num_weights)
-new_population = numpy.random.uniform(low=-5.0, high=5.0, size=pop_size)
+new_population = numpy.random.uniform(low=-1.0, high=1.0, size=pop_size)
 
 
 print(f"Initial Population: \n {new_population}")
@@ -31,8 +27,8 @@ for generation in range(num_generations):
     print(f"Generation {generation + 1} fitnesses: ")
     f.write(f"Generation {generation + 1} fitnesses: ")
     #parents = ga.selection(new_population, fitness, num_parents_mating)
-    parents = ga.tournament_selection(new_population, fitness, num_parents_mating)
-    offspring_crossover = ga.crossover(parents, offspring_size=(pop_size[0] - parents.shape[0], num_weights))
+    parents = ga.stochastic_selection(new_population, fitness, num_parents_mating)
+    offspring_crossover = ga.two_points_crossover(parents, offspring_size=(pop_size[0] - parents.shape[0], num_weights))
     offspring_mutation = ga.mutation(offspring_crossover)
     
     # survivor
