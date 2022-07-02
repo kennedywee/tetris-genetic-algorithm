@@ -5,10 +5,11 @@ import matplotlib.pyplot as plt
 f = open("record.txt", "w")
 
 num_weights = 4
-sol_per_pop = 20
-num_generations = 10
-num_parents_mating = 4
+sol_per_pop = 30
+num_generations = 25
+num_parents_mating = 10
 pieceLimit = 300
+offspring_size = (num_parents_mating, num_weights)
 # seeds: if seed<0: random else random.seed = seed
 seed = 1
 
@@ -27,20 +28,27 @@ for generation in range(num_generations):
     print(f"Generation {generation + 1} fitnesses: ")
     f.write(f"Generation {generation + 1} fitnesses: ")
     #parents = ga.selection(new_population, fitness, num_parents_mating)
-    parents = ga.stochastic_selection(new_population, fitness, num_parents_mating)
-    offspring_crossover = ga.two_points_crossover(parents, offspring_size=(pop_size[0] - parents.shape[0], num_weights))
-    offspring_mutation = ga.mutation(offspring_crossover)
+    parents = ga.tournament_selection(new_population, fitness, num_parents_mating)
+    offspring_crossover = ga.two_points_crossover(parents, offspring_size)
+    offspring_mutation = ga.swap_mutation(offspring_crossover)
     
-    # survivor
+    """
     new_population[0:parents.shape[0],     :] = parents
     new_population[parents.shape[0]:, :] = offspring_mutation
+    fitness = ga.cal_pop_fitness(new_population, pieceLimit, seed)
+    """
+    # Fitness Based Selection
+    new_population = ga.sort_by_fitness(new_population, fitness)
+    new_population[0:parents.shape[0], :]  = offspring_mutation
     fitness = ga.cal_pop_fitness(new_population, pieceLimit, seed)
 
     print(fitness)
     f.write(f"{fitness}\n")
+    average_fitness = numpy.mean(fitness)
     best_match_idx = numpy.where(fitness == numpy.max(fitness))[0][0]
     print(f"Current best: {new_population[best_match_idx, :]}")
     print(f"Current best fitness: {fitness[best_match_idx]}")
+    print(f"Average fitness: {average_fitness}")
     f.write(f"Current best {new_population[best_match_idx, :]}\n")
  
     print(f"New Population: \n {new_population}")

@@ -1,13 +1,42 @@
 import numpy
-K_fitness = []
-fitness = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 
-rand_index = numpy.random.randint(0, len(fitness), size = 3)
+initial_population = numpy.array([
+    [-0.87844225,  0.07533743,  0.99554256 , 0.24607956],
+    [-0.07405261, -0.20145329, -0.63890656, -0.00317644],
+    [ 0.6055186, 0.66819863,  0.92358563, -0.61441308],
+    [ 0.68355252, -0.92869079,  0.51552333, -0.44774395],
+    [ 0.83545089, 0.82440196, -0.30706522,  0.8815196 ],
+    [ 0.50441746,  0.00229493, -0.60757498, -0.01413133],
+    [ 0.70873082, -0.59924653, -0.14397285,  0.68063266],
+    [ 0.1456873,  -0.54211902, -0.66735049, -0.59068599],
+    [-0.60200351,  0.21421849,  0.02613247, -0.84918875],
+    [ 0.58356595,  0.13392026,  0.29658044,  0.04441237],
+    [ 0.85596375,  0.18191769,  0.42383855,  0.90110213],
+    [ 0.80786293,  0.63582071, -0.95143939, -0.86862743],
+    [ 0.99877433, -0.90939829, -0.81122095,  0.87170603],
+    [ 0.95964904, -0.31922243, -0.03700796,  0.5901169 ],
+    [ 0.97036834,  0.16277096,  0.93956682,  0.60659499],
+    [-0.03384425,  0.80108756,  0.47110614, -0.58099988],
+    [ 0.62787214,  0.52863093,  0.28804258, -0.66603525],
+    [-0.70547434,  0.51612901, -0.64210834, -0.52437629],
+    [ 0.84278739,  0.30997485, -0.31454793, -0.18508058],
+    [-0.15286489, -0.4115531,   0.95723402, -0.13336309]])
 
-print(f"rand_index: {rand_index}")
+fitness = [125, 447, 178, 178, 115, 56869, 118, 2005, 2005, 161, 132, 2775, 89, 135, 161, 412, 284, 26192, 176, 178]
 
 
+#K_fitnesses = [fitness[idx] for idx in rand_indices]
 
+def sort_by_fitness(population, fitness):
+    sorted_idx = numpy.argsort(fitness)
+    #print(f"Sorted idx: {sorted_idx}")
+    sorted_population = population[sorted_idx, :]
+    #print(f"Sorted population: {sorted_population}")
+    sorted_fitness = [fitness[x] for x in sorted_idx]
+    #print(f"Sorted fitness: {sorted_fitness}")
+    return sorted_population
 
-K_fitness = [fitness[idx] for idx in rand_index]
-print(f"K_fitness: {K_fitness}")
+new_population = sort_by_fitness(initial_population, fitness)
+
+mutation_rate = numpy.uint8(new_population.shape[0]/2)
+print(f"Mutation rate: {mutation_rate}")

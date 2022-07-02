@@ -256,7 +256,7 @@ class TetrisApp(object):
 
             if not self.computed:
                 self.computed = True
-                Ai.choose(self.board, self.stone, self.next_stone, self.stone_x, weights, self, False)
+                Ai.choose(self.board, self.stone, self.next_stone, self.stone_x, weights, self, True)
 
             if self.playWithUI:
                 for event in pygame.event.get():
@@ -276,6 +276,6 @@ class TetrisApp(object):
 if __name__ == '__main__':
     seed = -1
     piece_limit = 500
-    weights = [-0.74527646, 0.69234365, -0.58460981, -0.28681621]
+    weights = [-0.54156849,  0.57760541, -0.95554011, -0.53429319]
     result = TetrisApp(TRUE, seed).run(weights, piece_limit)
     print(result)

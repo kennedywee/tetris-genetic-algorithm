@@ -15,7 +15,7 @@ def cal_pop_fitness(pop, pieceLimit, seed):
         fitness.append(tetris.TetrisApp(True, seed).run(pop[indv], pieceLimit))
     return fitness
 
-# tournament selection
+# Generic selection
 def selection(population, fitness, num_parents):
     # Selecting the best individuals in the current generation as parents for producing the offspring of the next generation.
     parents = numpy.empty((num_parents, population.shape[1]))
@@ -80,7 +80,9 @@ def two_points_crossover(parents, offspring_size):
 # swap mutation
 def swap_mutation(offspring_crossover):
     
-    for idx in range(offspring_crossover.shape[0]):
+    mutation_rate = numpy.uint8(offspring_crossover.shape[0]/2)
+    
+    for idx in range(mutation_rate): # Mutation only half of the offsprings
         mutation_gene1 = numpy.random.randint(low=0, high=offspring_crossover.shape[1]/2, size=1)[0]
         mutation_gene2 = mutation_gene1 + int(offspring_crossover.shape[1]/2)
         temp = offspring_crossover[idx, mutation_gene1]
@@ -96,16 +98,12 @@ def mutation(offspring_crossover):
         offspring_crossover[idx, mutation_point] = offspring_crossover[idx, mutation_point] + random_value
     return offspring_crossover
 
-
-
-
 def tournament_selection(population, fitness, num_parents):
     parents = numpy.empty((num_parents, population.shape[1]))
         
     for parent_num in range(num_parents):
         rand_indices = numpy.random.randint(low=0.0, high=len(fitness), size = K_tournament)
         K_fitnesses = [fitness[idx] for idx in rand_indices]
-        #print(f"K_fitnesses: {K_fitnesses}")
         selected_parent_idx = numpy.where(K_fitnesses == numpy.max(K_fitnesses))[0][0]
         parents[parent_num, :] = population[selected_parent_idx, :]
     return parents
@@ -142,3 +140,10 @@ def stochastic_selection(population, fitness, num_parents):
                 break
 
     return parents
+
+def sort_by_fitness(population, fitness):
+
+    sorted_idx = numpy.argsort(fitness) # arrage the fitness in ascending order
+    sorted_population = population[sorted_idx, :]
+    sorted_fitness = [fitness[x] for x in sorted_idx]
+    return sorted_population
